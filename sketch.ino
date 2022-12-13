@@ -1,7 +1,7 @@
 #include<Wire.h>
 const int MPU=0x68; 
 int16_t AcX,AcY,AcZ,Tmp,GyX,GyY,GyZ;
-//hello
+//yes this is another test thank you for your patience
 void setup(){
   Wire.begin();
   Wire.beginTransmission(MPU);
