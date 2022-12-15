@@ -1,7 +1,18 @@
 //importing of wire library to talk to accelerometer
-#include<Wire.h>
+#include <Wire.h>
 const int MPU=0x68; 
 int16_t AcX,AcY,AcZ,Tmp,GyX,GyY,GyZ;
+
+//library for smoothing values of accelerometer
+#include <Ewma.h>
+int famount = 0.1;
+Ewma faX(famount);
+Ewma faY(famount);
+Ewma faZ(famount);
+Ewma fgX(famount);
+Ewma fgY(famount);
+Ewma fgZ(famount);
+float aX,aY,aZ,gX,gY,gZ;
 
 //importing of Adafruit dht library and creating of dht object
 #include <Adafruit_Sensor.h>
@@ -36,7 +47,7 @@ void setup() {
 }
 
 void loop(){
-  //reading accelerometer using I³C
+  //reading accelerometer using I²C
   Wire.beginTransmission(MPU);
   Wire.write(0x3B);  
   Wire.endTransmission(false);
@@ -48,6 +59,12 @@ void loop(){
   GyY=Wire.read()<<8|Wire.read();  
   GyZ=Wire.read()<<8|Wire.read();  
   
+  //smoothing of values from accelerometer 
+  //TODO!
+  aX = faX.filter(AcX);
+
+
+
   //reading temperature and humidity from dht sensor
   float temp = dht.readTemperature();
   float humi = dht.readHumidity();
